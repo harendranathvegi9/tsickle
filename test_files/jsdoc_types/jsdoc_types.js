@@ -3,6 +3,7 @@ goog.module('test_files.jsdoc_types.jsdoc_types');var module = module || {id: 't
  * ensuring that the type gets the proper name in JSDoc comments.
  */
 
+Object.defineProperty(exports, "__esModule", { value: true });
 var module1 = goog.require('test_files.jsdoc_types.module1');
 var module2_1 = goog.require('test_files.jsdoc_types.module2');
 const ClassOne = module2_1.ClassOne; /* local alias for Closure JSDoc */

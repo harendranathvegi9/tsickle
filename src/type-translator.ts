@@ -86,40 +86,42 @@ export function typeToDebugString(type: ts.Type): string {
 export function symbolToDebugString(sym: ts.Symbol): string {
   let debugString = `${JSON.stringify(sym.name)} flags:0x${sym.flags.toString(16)}`;
 
-  const symbolFlags = [
-    ts.SymbolFlags.FunctionScopedVariable,
-    ts.SymbolFlags.BlockScopedVariable,
-    ts.SymbolFlags.Property,
-    ts.SymbolFlags.EnumMember,
-    ts.SymbolFlags.Function,
-    ts.SymbolFlags.Class,
-    ts.SymbolFlags.Interface,
-    ts.SymbolFlags.ConstEnum,
-    ts.SymbolFlags.RegularEnum,
-    ts.SymbolFlags.ValueModule,
-    ts.SymbolFlags.NamespaceModule,
-    ts.SymbolFlags.TypeLiteral,
-    ts.SymbolFlags.ObjectLiteral,
-    ts.SymbolFlags.Method,
-    ts.SymbolFlags.Constructor,
-    ts.SymbolFlags.GetAccessor,
-    ts.SymbolFlags.SetAccessor,
-    ts.SymbolFlags.Signature,
-    ts.SymbolFlags.TypeParameter,
-    ts.SymbolFlags.TypeAlias,
-    ts.SymbolFlags.ExportValue,
-    ts.SymbolFlags.ExportType,
-    ts.SymbolFlags.ExportNamespace,
-    ts.SymbolFlags.Alias,
-    ts.SymbolFlags.Instantiated,
-    ts.SymbolFlags.Merged,
-    ts.SymbolFlags.Transient,
-    ts.SymbolFlags.Prototype,
-    ts.SymbolFlags.SyntheticProperty,
-    ts.SymbolFlags.Optional,
-    ts.SymbolFlags.ExportStar,
-  ];
-  for (const flag of symbolFlags) {
+  // const symbolFlags = [
+  //   ts.SymbolFlags.FunctionScopedVariable,
+  //   ts.SymbolFlags.BlockScopedVariable,
+  //   ts.SymbolFlags.Property,
+  //   ts.SymbolFlags.EnumMember,
+  //   ts.SymbolFlags.Function,
+  //   ts.SymbolFlags.Class,
+  //   ts.SymbolFlags.Interface,
+  //   ts.SymbolFlags.ConstEnum,
+  //   ts.SymbolFlags.RegularEnum,
+  //   ts.SymbolFlags.ValueModule,
+  //   ts.SymbolFlags.NamespaceModule,
+  //   ts.SymbolFlags.TypeLiteral,
+  //   ts.SymbolFlags.ObjectLiteral,
+  //   ts.SymbolFlags.Method,
+  //   ts.SymbolFlags.Constructor,
+  //   ts.SymbolFlags.GetAccessor,
+  //   ts.SymbolFlags.SetAccessor,
+  //   ts.SymbolFlags.Signature,
+  //   ts.SymbolFlags.TypeParameter,
+  //   ts.SymbolFlags.TypeAlias,
+  //   ts.SymbolFlags.ExportValue,
+  //   ts.SymbolFlags.ExportType,
+  //   ts.SymbolFlags.ExportNamespace,
+  //   ts.SymbolFlags.Alias,
+  //   ts.SymbolFlags.Instantiated,
+  //   ts.SymbolFlags.Merged,
+  //   ts.SymbolFlags.Transient,
+  //   ts.SymbolFlags.Prototype,
+  //   ts.SymbolFlags.SyntheticProperty,
+  //   ts.SymbolFlags.Optional,
+  //   ts.SymbolFlags.ExportStar,
+  // ];
+  for (const flagName in ts.SymbolFlags) {
+    if (typeof ts.SymbolFlags[flagName] === 'string') continue;
+    const flag = ts.SymbolFlags[flagName] as any as number;
     if ((sym.flags & flag) !== 0) {
       debugString += ` ${ts.SymbolFlags[flag]}`;
     }
@@ -180,6 +182,7 @@ export class TypeTranslator {
         return;
       },
       reportInaccessibleThisError: doNothing,
+      reportIllegalExtends: doNothing,
     };
     builder.buildSymbolDisplay(sym, writer, this.node);
     return str;
@@ -407,8 +410,8 @@ export class TypeTranslator {
       return `function(new: (${constructedType})${paramsStr}): ?`;
     }
 
-    for (let field of Object.keys(type.symbol.members)) {
-      switch (field) {
+    type.symbol.members.forEach((field, name) => {
+      switch (name) {
         case '__call':
           callable = true;
           break;
@@ -416,13 +419,13 @@ export class TypeTranslator {
           indexable = true;
           break;
         default:
-          let member = type.symbol.members[field];
           // optional members are handled by the type including |undefined in a union type.
           let memberType =
-              this.translate(this.typeChecker.getTypeOfSymbolAtLocation(member, this.node));
-          fields.push(`${field}: ${memberType}`);
+              this.translate(this.typeChecker.getTypeOfSymbolAtLocation(field, this.node));
+          fields.push(`${name}: ${memberType}`);
+          break;
       }
-    }
+    });
 
     // Try to special-case plain key-value objects and functions.
     if (fields.length === 0) {

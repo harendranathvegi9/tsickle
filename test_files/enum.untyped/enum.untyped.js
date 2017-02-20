@@ -1,4 +1,5 @@
 goog.module('test_files.enum.untyped.enum.untyped');var module = module || {id: 'test_files/enum.untyped/enum.untyped.js'};
+Object.defineProperty(exports, "__esModule", { value: true });
 let EnumUntypedTest1 = {};
 EnumUntypedTest1.XYZ = 0;
 EnumUntypedTest1.PI = 3.14159;

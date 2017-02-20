@@ -1,4 +1,5 @@
 goog.module('test_files.enum.enum');var module = module || {id: 'test_files/enum/enum.js'};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Line with a missing semicolon should not break the following enum.
 const /** @type {!Array<?>} */ EnumTestMissingSemi = [];
 let EnumTest1 = {};

@@ -1,4 +1,5 @@
 goog.module('test_files.export.export');var module = module || {id: 'test_files/export/export.js'};
+Object.defineProperty(exports, "__esModule", { value: true });
 var export_helper_1 = goog.require('test_files.export.export_helper');
 exports.export2 = export_helper_1.export2;
 exports.Bar = export_helper_1.Bar;

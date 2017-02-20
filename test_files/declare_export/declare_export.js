@@ -1,4 +1,5 @@
 goog.module('test_files.declare_export.declare_export');var module = module || {id: 'test_files/declare_export/declare_export.js'};
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @typedef {ExportDeclaredIf} */
 exports.ExportDeclaredIf;
 exports.exportedDeclaredVar = window.exportedDeclaredVar;

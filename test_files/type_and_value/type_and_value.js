@@ -1,4 +1,5 @@
 goog.module('test_files.type_and_value.type_and_value');var module = module || {id: 'test_files/type_and_value/type_and_value.js'};
+Object.defineProperty(exports, "__esModule", { value: true });
 var conflict = goog.require('test_files.type_and_value.module');
 // This test deals with symbols that are simultaneously types and values.
 // Use a browser built-in as both a type and a value.

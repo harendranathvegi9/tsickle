@@ -15,7 +15,7 @@
     "source-map-support": "^0.4.2"
   },
   "peerDependencies": {
-    "typescript": "^2.1.0"
+    "typescript": "Microsoft/TypeScript#2d62245607916af9056c222d1a082b3efc347282"
   },
   "devDependencies": {
     "@types/chai": "^3.4.32",
